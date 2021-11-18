@@ -1,24 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import { decrementCount, incrementCount } from "./actions/CounterActions";
+import { loadData } from "./actions/dataToDosActions";
+import { multypliByTwo } from "./actions/MultiplyActions";
+import { useContextData } from "./context/ContextProvider";
 
-function App() {
+
+function App() { 
+
+  const {
+    state: {
+      counter: { count },
+      multiplyCounter: { multiplyCount },
+      dataToDos:{dataToDosState, loader}
+    },
+    dispatch } = useContextData()
+
+  console.log(loader)
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      Count: {count}
+      <button onClick={() => decrementCount(dispatch)}>-</button>
+      <button onClick={() => incrementCount(dispatch)}>+</button>
+      <hr />
+      
+      Count Multiply: {multiplyCount}
+      <button onClick={() => multypliByTwo(dispatch)}>*</button>
+      <hr />
+
+      <button onClick={() => loadData(dispatch)}>Load Data</button>
+
+      {
+        loader ? ('Cargando...'):(
+          dataToDosState?.map(item => (
+            <h1 key={item.id}>{item.title}</h1>
+          ))
+        )
+      }
+
+    </>
   );
 }
 
